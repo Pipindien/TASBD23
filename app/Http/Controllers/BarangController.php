@@ -11,7 +11,7 @@ class BarangController extends Controller
 {
     public function index()
     {
-        $datas = DB::table('barangs')->whereNull('deleted_at')->get();
+        $datas = DB::table('tenant')->whereNull('deleted_at')->get();
         return view('barang.index')->with('datas', $datas);
     }
 
@@ -23,21 +23,21 @@ class BarangController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'id_barang' => 'required',
-            'nama_barang' => 'required',
-            'harga' => 'required',
+            'id_tenant' => 'required',
+            'nama_stand' => 'required',
+            'harga_sewa' => 'required',
             'stock' => 'required',
-            'id_gudang' => 'required',
-            'id_store' => 'required',
+            'id_lokasi' => 'required',
+            'id_jenis' => 'required',
         ]);
 
-        DB::table('barangs')->insert([
-            'id_barang' => $request->id_barang,
-            'nama_barang' => $request->nama_barang,
-            'harga' => $request->harga,
+        DB::table('tenant')->insert([
+            'id_tenant' => $request->id_tenant,
+            'nama_stand' => $request->nama_stand,
+            'harga_sewa' => $request->harga_sewa,
             'stock' => $request->stock,
-            'id_gudang' => $request->id_gudang,
-            'id_store' => $request->id_store,
+            'id_lokasi' => $request->id_lokasi,
+            'id_jenis' => $request->id_jenis,
         ]);
 
         return redirect()->route('barang.index')->with('success', 'Saved Successfully');
@@ -45,17 +45,17 @@ class BarangController extends Controller
 
     public function edit($id)
     {
-        $data = DB::table('barangs')->where('id_barang', $id)->first();
+        $data = DB::table('tenant')->where('id_tenant', $id)->first();
         return view('barang.edit')->with('data', $data);
     }
 
     public function show($id)
     {
-        $data = DB::table('barangs as b')
-            ->join('gudangs as g', 'b.id_gudang', '=', 'g.id_gudang')
-            ->join('stores as s', 'b.id_store', '=', 's.id_store')
-            ->where('b.id_barang', $id)
-            ->select('b.*', 'g.nama_gudang', 's.nama_store')
+        $data = DB::table('tenant as t')
+            ->join('lokasi as l', 't.id_lokasi', '=', 'l.id_lokasi')
+            ->join('jenis as j', 't.id_jenis', '=', 'j.id_jenis')
+            ->where('t.id_tenant', $id)
+            ->select('t.*', 'l.alamat', 'j.jenis')
             ->first();
 
         return view('barang.show')->with('data', $data);
@@ -64,23 +64,23 @@ class BarangController extends Controller
     public function update($id, Request $request)
     {
         $request->validate([
-            'id_barang' => 'required',
-            'nama_barang' => 'required',
-            'harga' => 'required',
+            'id_tenant' => 'required',
+            'nama_stand' => 'required',
+            'harga_sewa' => 'required',
             'stock' => 'required',
-            'id_gudang' => 'required',
-            'id_store' => 'required',
+            'id_lokasi' => 'required',
+            'id_jenis' => 'required',
         ]);
 
-        DB::table('barangs')
-            ->where('id_barang', $id)
+        DB::table('tenant')
+            ->where('id_tenant', $id)
             ->update([
-                'id_barang' => $request->id_barang,
-                'nama_barang' => $request->nama_barang,
-                'harga' => $request->harga,
+                'id_tenant' => $request->id_tenant,
+                'nama_stand' => $request->nama_stand,
+                'harga_sewa' => $request->harga_sewa,
                 'stock' => $request->stock,
-                'id_gudang' => $request->id_gudang,
-                'id_store' => $request->id_store,
+                'id_lokasi' => $request->id_lokasi,
+                'id_jenis' => $request->id_jenis,
             ]);
 
         return redirect()->route('barang.index')->with('success', 'Updated Successfully');
@@ -88,28 +88,28 @@ class BarangController extends Controller
 
     public function softDelete($id)
     {
-        DB::table('barangs')->where('id_barang', $id)->update(['deleted_at' => now()]);
+        DB::table('tenant')->where('id_tenant', $id)->update(['deleted_at' => now()]);
         return redirect('/soft');
     }
 
     public function restore($id)
     {
-        DB::table('barangs')->where('id_barang', $id)->update(['deleted_at' => null]);
+        DB::table('tenant')->where('id_tenant', $id)->update(['deleted_at' => null]);
         return redirect('/soft');
     }
 
     public function hardDelete($id)
     {
-        DB::table('barangs')->where('id_barang', $id)->delete();
+        DB::table('tenant')->where('id_tenant', $id)->delete();
         return redirect()->route('softDelete')->with('success', 'Deleted Successfully');
     }
 
     public function softIndex()
     {
-        $datas = DB::table('barangs as b')
-            ->join('gudangs as g', 'b.id_gudang', '=', 'g.id_gudang')
-            ->join('stores as s', 'b.id_store', '=', 's.id_store')
-            ->whereNotNull('b.deleted_at')
+        $datas = DB::table('tenant as t')
+            ->join('lokasi as l', 't.id_lokasi', '=', 'l.id_lokasi')
+            ->join('jenis as j', 't.id_jenis', '=', 'j.id_jenis')
+            ->whereNotNull('t.deleted_at')
             ->get();
 
         return view('soft.index', [
@@ -119,10 +119,10 @@ class BarangController extends Controller
 
     public function trashed()
     {
-        $datas = DB::table('barangs as b')
-            ->join('gudangs as g', 'b.id_gudang', '=', 'g.id_gudang')
-            ->join('stores as s', 'b.id_store', '=', 's.id_store')
-            ->whereNotNull('b.deleted_at')
+        $datas = DB::table('tenant as t')
+            ->join('lokasi as l', 't.id_lokasi', '=', 'l.id_lokasi')
+            ->join('jenis as j', 't.id_jenis', '=', 'j.id_jenis')
+            ->whereNotNull('t.deleted_at')
             ->get();
 
         return view('soft.index', [

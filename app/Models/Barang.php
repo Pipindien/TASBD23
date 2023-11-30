@@ -14,7 +14,7 @@ class Barang extends Model
      *
      * @var string
      */
-    protected $table = 'barangs';
+    protected $table = 'tenant';
 
     /**
      * The attributes that aren't mass assignable.

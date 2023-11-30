@@ -14,7 +14,7 @@ class Gudang extends Model
      *
      * @var string
      */
-    protected $table = 'gudangs';
+    protected $table = 'lokasi';
 
     /**
      * The attributes that aren't mass assignable.

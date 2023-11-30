@@ -11,7 +11,7 @@ class GudangController extends Controller
 {
     public function index()
     {
-        $datas = DB::table('gudangs')->get();
+        $datas = DB::table('lokasi')->get();
         return view('gudang.index')->with('datas', $datas);
     }
 
@@ -23,13 +23,13 @@ class GudangController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'id_gudang' => 'required',
-            'nama_gudang' => 'required'
+            'id_lokasi' => 'required',
+            'alamat' => 'required'
         ]);
 
-        DB::table('gudangs')->insert([
-            'id_gudang' => $request->id_gudang,
-            'nama_gudang' => $request->nama_gudang
+        DB::table('lokasi')->insert([
+            'id_lokasi' => $request->id_lokasi,
+            'alamat' => $request->alamat
         ]);
 
         return redirect()->route('gudang.index')->with('success', 'Saved Successfully');
@@ -37,22 +37,22 @@ class GudangController extends Controller
 
     public function edit($id)
     {
-        $data = DB::table('gudangs')->where('id_gudang', $id)->first();
+        $data = DB::table('lokasi')->where('id_lokasi', $id)->first();
         return view('gudang.edit')->with('data', $data);
     }
 
     public function update($id, Request $request)
     {
         $request->validate([
-            'id_gudang' => 'required',
-            'nama_gudang' => 'required'
+            'id_lokasi' => 'required',
+            'alamat' => 'required'
         ]);
        
-        DB::table('gudangs')
-            ->where('id_gudang', $id)
+        DB::table('lokasi')
+            ->where('id_lokasi', $id)
             ->update([
-                'id_gudang' => $request->id_gudang,
-                'nama_gudang' => $request->nama_gudang
+                'id_lokasi' => $request->id_lokasi,
+                'alamat' => $request->alamat
             ]);
 
         return redirect()->route('gudang.index')->with('success', 'Changed Successfully');
@@ -61,7 +61,7 @@ class GudangController extends Controller
     public function delete($id)
     {
     
-        DB::table('gudangs')->where('id_gudang', $id)->delete();
+        DB::table('lokasi')->where('id_lokasi', $id)->delete();
     
         return redirect()->route('gudang.index')->with('success', 'Deleted Successfully');
     }

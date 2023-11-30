@@ -16,13 +16,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('barangs', function (Blueprint $table) {
-            $table->id('id_barang');
-            $table->string('nama_barang');
-            $table->integer('harga');
+        Schema::create('tenant', function (Blueprint $table) {
+            $table->id('id_tenant');
+            $table->string('nama_stand');
+            $table->integer('harga_sewa');
             $table->integer('stock');
-            $table->foreignIdFor(Gudang::class,'id_gudang');
-            $table->foreignIdFor(Store::class,'id_store');
+            $table->foreignIdFor(Gudang::class,'id_lokasi');
+            $table->foreignIdFor(Store::class,'id_jenis');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -35,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('barangs');
+        Schema::dropIfExists('tenant');
     }
 };

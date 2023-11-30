@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Hash;
 class StoreController extends Controller
 {
     public function index() {
-        $datas = DB::table('stores')->get();
+        $datas = DB::table('jenis')->get();
 
         return view('store.index')->with('datas', $datas);
     }
@@ -21,42 +21,42 @@ class StoreController extends Controller
 
     public function store(Request $request) {
         $request->validate([
-            'id_store' => 'required',
-            'nama_store' => 'required'
+            'id_jenis' => 'required',
+            'jenis' => 'required'
         ]);
 
-        DB::table('stores')->insert([
-            'id_store' => $request->id_store,
-            'nama_store' => $request->nama_store
+        DB::table('jenis')->insert([
+            'id_jenis' => $request->id_jenis,
+            'jenis' => $request->jenis
         ]);
 
         return redirect()->route('store.index')->with('success', 'Saved Successfully');
     }
 
     public function edit($id) {
-        $data = DB::table('stores')->where('id_store', $id)->first();
+        $data = DB::table('jenis')->where('id_jenis', $id)->first();
 
         return view('store.edit')->with('data', $data);
     }
 
     public function update($id, Request $request) {
         $request->validate([
-            'id_store' => 'required',
-            'nama_store' => 'required'
+            'id_jenis' => 'required',
+            'jenis' => 'required'
         ]);
 
-        DB::table('stores')
-            ->where('id_store', $id)
+        DB::table('jenis')
+            ->where('id_jenis', $id)
             ->update([
-                'id_store' => $request->id_store,
-                'nama_store' => $request->nama_store
+                'id_jenis' => $request->id_jenis,
+                'jenis' => $request->jenis
             ]);
 
         return redirect()->route('store.index')->with('success', 'Changed Successfully');
     }
 
     public function delete($id) {
-        DB::table('stores')->where('id_store', $id)->delete();
+        DB::table('jenis')->where('id_jenis', $id)->delete();
 
         return redirect()->route('store.index')->with('success', 'Deleted Successfully');
     }

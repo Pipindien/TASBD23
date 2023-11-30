@@ -14,7 +14,7 @@ class store extends Model
      *
      * @var string
      */
-    protected $table = 'stores ';
+    protected $table = 'jenis ';
 
     /**
      * The attributes that aren't mass assignable.
